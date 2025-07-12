@@ -10,8 +10,9 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+         console.log("Token decodificado:", decoded);
 
-        // ⚠️ Asignamos los nombres que usas en los controllers
+        //  Asignamos los nombres que usas en los controllers
         req.user = {
             id: decoded.id_user_cat,
             role: decoded.role_cat_id,
