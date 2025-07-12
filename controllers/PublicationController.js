@@ -37,19 +37,27 @@ const PublicationController = {
             const roleId = req.user.role;
 
             const existing = await PublicationModel.getById(id);
-            if (!existing) return res.status(404).json({ error: 'Publicación no encontrada' });
+            if (!existing)
+                return res.status(404).json({ error: 'Publicación no encontrada' });
 
-            // Solo admins o dueño
+            if (existing.m_anulado)
+                return res.status(403).json({ error: 'No se puede editar una publicación anulada' });
+
             if (existing.user_id !== userId && roleId !== 1)
                 return res.status(403).json({ error: 'No autorizado para editar esta publicación' });
 
-            const updated = await PublicationModel.update(id, {
-                title: req.body.title,
-                description: req.body.description,
-                image: req.body.image,
-                price: req.body.price,
-                categoryId: req.body.categoryId
-            });
+            const updatedFields = {};
+
+            if (req.body.title) updatedFields.title = req.body.title;
+            if (req.body.description) updatedFields.description = req.body.description;
+            if (req.body.image) updatedFields.image = req.body.image;
+            if (req.body.price) updatedFields.price = req.body.price;
+            if (req.body.categoryId) updatedFields.categoryId = req.body.categoryId;
+
+            if (Object.keys(updatedFields).length === 0)
+                return res.status(400).json({ error: 'No se enviaron campos para actualizar' });
+
+            const updated = await PublicationModel.update(id, updatedFields);
 
             res.json({ message: 'Publicación actualizada', publication: updated });
         } catch (err) {
@@ -64,7 +72,8 @@ const PublicationController = {
             const roleId = req.user.role;
 
             const existing = await PublicationModel.getById(id);
-            if (!existing) return res.status(404).json({ error: 'Publicación no encontrada' });
+            if (!existing)
+                return res.status(404).json({ error: 'Publicación no encontrada' });
 
             if (existing.user_id !== userId && roleId !== 1)
                 return res.status(403).json({ error: 'No autorizado para eliminar esta publicación' });
@@ -73,6 +82,30 @@ const PublicationController = {
             res.json({ message: 'Publicación eliminada', publication: deleted });
         } catch (err) {
             res.status(500).json({ error: 'Error al eliminar publicación', details: err.message });
+        }
+    },
+
+    // Sin loguin
+    getOnePerCategory: async (req, res) => {
+        try {
+            const publications = await PublicationModel.getOnePerCategory();
+            res.json({ publications });
+        } catch (err) {
+            res.status(500).json({ error: 'Error al obtener publicaciones por categoría', details: err.message });
+        }
+    },
+
+    getByCategory: async (req, res) => {
+        try {
+            const categoryId = parseInt(req.params.id);
+            if (isNaN(categoryId)) {
+                return res.status(400).json({ error: 'ID de categoría inválido' });
+            }
+
+            const publications = await PublicationModel.getByCategory(categoryId);
+            res.json({ publications });
+        } catch (err) {
+            res.status(500).json({ error: 'Error al obtener publicaciones por categoría', details: err.message });
         }
     }
 };
