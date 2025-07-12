@@ -1,0 +1,106 @@
+PS C:\Users\Gamer\Desktop\Desktop\Proyecto_final_js83\Tonitas\backend> npm test 
+
+> backend@1.0.0 test
+> jest
+
+
+✘ jest v30.0.4 is not yet supported in the Community edition of Console Ninja.
+We are working hard on it for you https://tinyurl.com/3h9mtwra.
+
+Estimated release dates:
+  - Community users: around 1st September, 2025 (subject to team availability)
+  - PRO users:       priority access is available now
+
+ PASS  tests/register.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (7) from .env (tip: ⚙️  write to custom object with { processEnv: myObject })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      [dotenv@17.2.0] injecting env (0) from .env (tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild)
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      Conexión a base de datos exitosa
+
+      at log (config/db.js:13:25)
+
+ PASS  tests/login.test.js
+  ● Console
+                                                                                                                                                                                                
+    console.log
+      [dotenv@17.2.0] injecting env (7) from .env (tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild)
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      [dotenv@17.2.0] injecting env (0) from .env (tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+
+  ●  Cannot log after tests are done. Did you forget to wait for something async in your test?
+    Attempted to log "Conexión a base de datos exitosa".
+
+      11 |
+      12 | pool.connect()
+    > 13 |     .then(() => console.log('Conexión a base de datos exitosa'))
+         |                         ^
+      14 |     .catch((err) => console.error('Error al conectar a la base de datos: ', err));
+      15 |
+      16 | module.exports = pool;
+
+      at console.log (node_modules/@jest/console/build/index.js:147:10)
+      at log (config/db.js:13:25)
+
+ PASS  tests/publicationsByCategory.test.js
+  ● Console
+                                                                                                                                                                                                
+    console.log
+      [dotenv@17.2.0] injecting env (7) from .env (tip: ⚙️  enable debug logging with { debug: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      [dotenv@17.2.0] injecting env (0) from .env (tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      Conexión a base de datos exitosa
+
+      at log (config/db.js:13:25)
+
+ PASS  tests/publications.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (7) from .env (tip: ⚙️  write to custom object with { processEnv: myObject })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      [dotenv@17.2.0] injecting env (0) from .env (tip: ⚙️  enable debug logging with { debug: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.log
+      Conexión a base de datos exitosa
+
+      at log (config/db.js:13:25)
+
+
+Test Suites: 4 passed, 4 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        0.993 s, estimated 1 s
+Ran all test suites.
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.
+
+

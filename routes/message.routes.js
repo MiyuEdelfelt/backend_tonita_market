@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const authMiddleware = require('../middlewares/authMiddleware');
 
-// ✅ Obtener mensajes recibidos (inbox) — ¡Debe ir arriba!
+// Obtener mensajes recibidos (inbox) — ¡Debe ir arriba!
 router.get('/inbox', authMiddleware, async (req, res) => {
     const userId = req.user?.id;
 
@@ -34,7 +34,7 @@ router.get('/inbox', authMiddleware, async (req, res) => {
     }
 });
 
-// ✅ Enviar mensaje
+// Enviar mensaje
 router.post('/messages', authMiddleware, async (req, res) => {
     const senderId = req.user?.id;
     const { receiver_id, message } = req.body;
@@ -57,7 +57,7 @@ router.post('/messages', authMiddleware, async (req, res) => {
     }
 });
 
-// ✅ Obtener historial de mensajes entre dos usuarios
+// Obtener historial de mensajes entre dos usuarios
 router.get('/messages/:receiverId', authMiddleware, async (req, res) => {
     const senderId = req.user?.id;
     const receiverId = parseInt(req.params.receiverId);
