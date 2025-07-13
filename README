@@ -1,0 +1,18 @@
+# Para probar el backend (se ejecuta en el puerto 3001)
+
+node server.js 
+
+ejemplo:
+
+PS C:\Users\Gamer\Desktop\Desktop\Proyecto_final_js83\Tonitas\backend> node server.js
+[dotenv@17.2.0] injecting env (7) from .env (tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' })
+[dotenv@17.2.0] injecting env (0) from .env (tip: ⚙️  suppress all logs with { quiet: true })
+[dotenv@17.2.0] injecting env (0) from .env (tip: ⚙️  write to custom object with { processEnv: myObject })
+Servidor corriendo en http://localhost:3001
+Conexión a base de datos exitosa
+
+# Base de datos, esta está incluida en la carptea data/  - Es un backup de la base de datos que utilicé cuando probé todos lo endpoints deberia tener datos ya que utilicé 
+Use SQL INSERT instead of COPY for rows
+
+# Para probar con thunder client dejé en carpeta de imagenes todas la pruebas de los endpoints ahí, por lo que si se desea probar seguir el ejemplo de la imagen carpeta img_thunder_client/
+
