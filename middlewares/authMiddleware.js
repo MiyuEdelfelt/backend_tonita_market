@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const authMiddleware = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Bearer TOKEN
+    const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ message: 'Token no proporcionado' });
@@ -10,13 +10,12 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-         console.log("Token decodificado:", decoded);
+        console.log("Token decodificado:", decoded);
 
-        //  Asignamos los nombres que usas en los controllers
         req.user = {
             id: decoded.id_user_cat,
-            role: decoded.role_cat_id,
-            alias: decoded.alias_cat
+            alias: decoded.alias_cat,
+            role_cat_id: decoded.role_cat_id 
         };
 
         next();

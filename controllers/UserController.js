@@ -60,12 +60,21 @@ const UserController = {
                 { expiresIn: '2h' }
             );
 
-            res.json({ message: 'Login exitoso', token });
+            res.json({
+                message: 'Login exitoso',
+                token,
+                nombre: `${user.name_cat} ${user.last_name_cat}`,
+                rol: user.role_cat_id === 1 ? 'admin_cat' : 'normal_cat',
+                email: user.email_cat,
+                role_cat_id: user.role_cat_id
+            });
+
         } catch (error) {
             console.error('Error en login:', error);
             res.status(500).json({ message: 'Error interno del servidor' });
         }
     },
+
 
     // FUNCIÓN ADMIN: Obtener todos los usuarios
     getAllUsers: async (req, res) => {

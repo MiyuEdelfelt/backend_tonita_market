@@ -3,13 +3,18 @@ const PublicationModel = require('../models/PublicationModel');
 const PublicationController = {
     create: async (req, res) => {
         try {
-            const { title, description, image, price, categoryId } = req.body;
+            const { title, description, price, categoryId } = req.body;
             const userId = req.user.id;
+
+            let imagePath = null;
+            if (req.file) {
+                imagePath = `/uploads/${req.file.filename}`;
+            }
 
             const publication = await PublicationModel.create({
                 title,
                 description,
-                image,
+                image: imagePath,
                 price,
                 categoryId,
                 userId
@@ -17,6 +22,7 @@ const PublicationController = {
 
             res.status(201).json({ message: 'Publicación creada', publication });
         } catch (err) {
+            console.error('Error al crear publicación:', err);
             res.status(500).json({ error: 'Error al crear publicación', details: err.message });
         }
     },
@@ -34,7 +40,7 @@ const PublicationController = {
         try {
             const id = parseInt(req.params.id);
             const userId = req.user.id;
-            const roleId = req.user.role;
+            const roleId = req.user.role_cat_id; // ✅ Corregido
 
             const existing = await PublicationModel.getById(id);
             if (!existing)
@@ -47,7 +53,6 @@ const PublicationController = {
                 return res.status(403).json({ error: 'No autorizado para editar esta publicación' });
 
             const updatedFields = {};
-
             if (req.body.title) updatedFields.title = req.body.title;
             if (req.body.description) updatedFields.description = req.body.description;
             if (req.body.image) updatedFields.image = req.body.image;
@@ -58,7 +63,6 @@ const PublicationController = {
                 return res.status(400).json({ error: 'No se enviaron campos para actualizar' });
 
             const updated = await PublicationModel.update(id, updatedFields);
-
             res.json({ message: 'Publicación actualizada', publication: updated });
         } catch (err) {
             res.status(500).json({ error: 'Error al actualizar publicación', details: err.message });
@@ -69,7 +73,7 @@ const PublicationController = {
         try {
             const id = parseInt(req.params.id);
             const userId = req.user.id;
-            const roleId = req.user.role;
+            const roleId = req.user.role_cat_id; // ✅ Corregido
 
             const existing = await PublicationModel.getById(id);
             if (!existing)
@@ -85,7 +89,6 @@ const PublicationController = {
         }
     },
 
-    // Sin loguin
     getOnePerCategory: async (req, res) => {
         try {
             const publications = await PublicationModel.getOnePerCategory();
@@ -94,6 +97,22 @@ const PublicationController = {
             res.status(500).json({ error: 'Error al obtener publicaciones por categoría', details: err.message });
         }
     },
+
+    getMine: async (req, res) => {
+        try {
+            console.log("👉 Usuario autenticado:", req.user);
+            const userId = req.user.id;
+
+            const publications = await PublicationModel.getByUserId(userId);
+            console.log("👉 Publicaciones del usuario:", publications);
+
+            res.json({ publications });
+        } catch (err) {
+            res.status(500).json({ error: 'Error al obtener tus publicaciones', details: err.message });
+        }
+    },
+
+
 
     getByCategory: async (req, res) => {
         try {
@@ -107,7 +126,18 @@ const PublicationController = {
         } catch (err) {
             res.status(500).json({ error: 'Error al obtener publicaciones por categoría', details: err.message });
         }
-    }
+    },
+
+    // Para usuarios administradores listar
+    getAllAdmin: async (req, res) => {
+        try {
+            const publications = await PublicationModel.getAll();
+            res.json({ publications });
+        } catch (err) {
+            res.status(500).json({ error: 'Error al obtener publicaciones', details: err.message });
+        }
+    },
+
 };
 
 module.exports = PublicationController;

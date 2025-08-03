@@ -11,9 +11,20 @@ const PublicationModel = {
     },
 
     getAll: async () => {
-        const result = await pool.query(`SELECT * FROM publications WHERE m_anulado = false`);
+        const result = await pool.query(`
+        SELECT 
+            p.*, 
+            u.alias_cat AS user_name,
+            u.email_cat,
+            u.phone_cat
+        FROM publications p
+        JOIN user_cat u ON p.user_id = u.id_user_cat
+        WHERE p.m_anulado = false
+        ORDER BY p.id_publication DESC
+    `);
         return result.rows;
     },
+
 
     getById: async (id) => {
         const result = await pool.query(`SELECT * FROM publications WHERE id_publication = $1 AND m_anulado = false`, [id]);
@@ -57,28 +68,49 @@ const PublicationModel = {
         );
         return result.rows[0];
     },
+    getByUserId: async (userId) => {
+        const result = await pool.query(`
+        SELECT * FROM publications
+        WHERE user_id = $1 AND m_anulado = false
+        ORDER BY id_publication DESC
+    `, [userId]);
+        return result.rows;
+    },
+
 
     //Sin loguin
     getOnePerCategory: async () => {
         const result = await pool.query(`
-        SELECT DISTINCT ON (category_id) *
-        FROM publications
-        WHERE m_anulado = false
-        ORDER BY category_id, id_publication DESC
+        SELECT DISTINCT ON (p.category_id) 
+            p.*, 
+            u.alias_cat AS user_name,
+            u.email_cat,
+            u.phone_cat
+        FROM publications p
+        JOIN user_cat u ON p.user_id = u.id_user_cat
+        WHERE p.m_anulado = false
+        ORDER BY p.category_id, p.id_publication DESC
     `);
         return result.rows;
     },
 
+
     getByCategory: async (categoryId) => {
         const result = await pool.query(`
-        SELECT *
-        FROM publications
-        WHERE category_id = $1 AND m_anulado = false
-        ORDER BY id_publication DESC
+        SELECT 
+            p.*,
+            u.alias_cat AS user_name,
+            u.email_cat,
+            u.phone_cat
+        FROM publications p
+        JOIN user_cat u ON p.user_id = u.id_user_cat
+        WHERE p.category_id = $1 AND p.m_anulado = false
+        ORDER BY p.id_publication DESC
     `, [categoryId]);
 
         return result.rows;
     }
+
 };
 
 module.exports = PublicationModel;

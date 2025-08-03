@@ -7,10 +7,13 @@ const pool = new Pool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
+    ssl: {
+        rejectUnauthorized: false 
+    }
 });
 
 pool.connect()
-    .then(() => console.log('Conexión a base de datos exitosa'))
-    .catch((err) => console.error('Error al conectar a la base de datos: ', err));
+    .then(() => console.log('✅ Conexión a base de datos exitosa'))
+    .catch((err) => console.error('❌ Error al conectar a la base de datos: ', err));
 
 module.exports = pool;
