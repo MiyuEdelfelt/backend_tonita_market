@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 //Rutas 
-app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/users', require('./routes/User.routes'));
 app.use('/api/test', testAdminRoutes);
 app.use('/api/publications', publicationRoutes);
 app.use('/api', checkoutRoutes);
